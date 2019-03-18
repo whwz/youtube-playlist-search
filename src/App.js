@@ -1,14 +1,14 @@
 import React, { Component } from "react";
 import { MDBBtn } from "mdbreact";
 import "./index.css";
-
+let db = [];
 class App extends Component {
   constructor(props){
     super(props);
     this.state = {
       currentUser: '',
       playlists: [],
-      vids: []
+      vids: db
     }
   }
   /* 
@@ -96,12 +96,12 @@ class App extends Component {
     })
 /* 
     const a = findWithAttr(this.state.playlists, "id", "PLhI_w4Zkc_omQ5YfMmWOl4ZTfEkwSgtbD"); */
-      console.log(e.target.id);
+      /* console.log(e.target.id);
       console.log(a);
-      console.log(this.state);
+      console.log(this.state); */
     }
   //delete private vids
-  handlePlaylistClick = (e) => {
+ /*  handlePlaylistClick = (e) => {
     console.log("playlist click");
     this.setState({vids: []});
     console.log(e.target.name);
@@ -121,7 +121,7 @@ class App extends Component {
         }
 
       let pages = Math.ceil(json.pageInfo.totalResults/50);
-      /* console.log(pages); */
+      
       
       if(pages > 1)
       {
@@ -130,8 +130,7 @@ class App extends Component {
         for(let j = 1; j < pages; j++)
         {
           
-          /* const pageUrl = '';
-          nextPageToken ? pageUrl = url + "&pageToken=" + nextToken : pageUrl = url */
+          
           console.log("j = " + j);
           console.log(url + "&pageToken=" + nextToken);
           fetch(url + "&pageToken=" + nextToken)
@@ -148,18 +147,120 @@ class App extends Component {
                             });
               }
               console.log(json.nextPageToken);
-              /* if(j + 1 < pages)  */ nextToken = json.nextPageToken;
+              nextToken = json.nextPageToken;
               console.log("here" + nextToken);
             })
-            
-            /* json.nextPageToken ? nextToken = json.nextPageToken : nextToken = ''; */
-            
-            /* console.log(nextToken); */
         }
     }
     });
+  } */
 
+   
+
+  handlePlaylistClick = (e) => {
+
+    const sleep = (milliseconds) => {
+      var start = new Date().getTime();
+      for (var i = 0; i < 1e7; i++) {
+        if ((new Date().getTime() - start) > milliseconds){
+          break;
+        }
+      }
+    }
+
+    /* console.log("playlist click"); */
+    //this.setState({vids: []});
+    /* console.log(e.target.name); */
+    let url = "https://www.googleapis.com/youtube/v3/playlistItems?key=AIzaSyDotJrfVw9QwJVu85Hs91Dh2DYDsvOiw6Q&part=snippet,contentDetails&playlistId=" + e.target.name + "&maxResults=50";
+    fetch(url)
+    .then(res => res.json())
+    .then(json => {
+      let pages = Math.ceil(json.pageInfo.totalResults/50);
+
+      if(pages > 1)
+      {
+        console.log("pages > 1");
+        let nextToken = '';
+        nextToken = json.nextPageToken;
+        
+        
+        for(let k = 0; k < json.items.length; k++)
+        {
+          if(json.items[k].snippet.title !== "Private video")
+          db.push( 
+                    {id: json.items[k].contentDetails.videoId,
+                    title: json.items[k].snippet.title,
+                    playlistId: json.items[k].snippet.playlistId}
+                  );
+        }
+
+
+        let newUrl = url + "&pageToken=" + nextToken;
+        for(let j = 1; j < pages; j++)
+        {
+          (function(j){
+            setTimeout(function(){
+
+              console.log("j = " + j);
+          console.log("newUrl = " + newUrl);
+      
+          fetch(newUrl)
+            .then(res2 => res2.json2())
+            .then(json2 => {
+              console.log(json2);
+              for(let k = 0; k < json2.items.length; k++)
+              {
+                if(json2.items[k].snippet.title !== "Private video")
+                db.push( 
+                  {id: json2.items[k].contentDetails.videoId,
+                  title: json2.items[k].snippet.title,
+                  playlistId: json2.items[k].snippet.playlistId}
+                );
+              }
+              
+              /* console.log(json.nextPageToken);
+              nextToken = json.nextPageToken;
+              console.log("here" + nextToken); */
+              
+              nextToken = json2.nextPageToken;
+              console.log("pageToken = " + nextToken);
+              newUrl = url + "&pageToken=" + nextToken;;
+            })
+
+            }, j * 2000);
+          }(j));
+
+          
+          
+        }
+    }
+
+
+    else {
+      console.log("pages <= 1");
+      db = [];
+      for(let k = 0; k < json.items.length; k++)
+      {
+        if(json.items[k].snippet.title !== "Private video")
+          db.push( 
+                    {id: json.items[k].contentDetails.videoId,
+                    title: json.items[k].snippet.title,
+                    playlistId: json.items[k].snippet.playlistId}
+                  );
+      }
+    }
+    
+
+
+    });
+
+    setTimeout(()=>this.setState({
+      vids: db
+    }), 2000);
   }
+
+
+  
   handlePlaylistChange = () => {
     console.log("playlist change");
   }
