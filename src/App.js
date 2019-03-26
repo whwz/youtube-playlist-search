@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { MDBBtn } from "mdbreact";
 import "./index.css";
-import { tokens } from "./tokens";
+import { tokens, API_KEY } from "./env";
 
 let db = [];
 class App extends Component {
@@ -12,13 +12,17 @@ class App extends Component {
       playlists: [],
       vids: db
     }
-  }
- 
+  } 
+  /* 
+  let url  = "https://www.googleapis.com/youtube/v3/search?part=id&q=" + this.input.value + "&type=channel&key=AIzaSyDotJrfVw9QwJVu85Hs91Dh2DYDsvOiw6Q";
+  let url2 = "https://www.googleapis.com/youtube/v3/channels?key=AIzaSyDotJrfVw9QwJVu85Hs91Dh2DYDsvOiw6Q&forUsername=" + this.input.value + "&part=id"; */
     submitForm = (e) => {
+      console.log(e.target);
+      console.log("https://www.googleapis.com/youtube/v3/playlists?key=" + API_KEY + "&channelId=" + this.inputId.value + "&part=snippet,contentDetails&maxResults=50");
       e.preventDefault();
-
       this.setState({playlists: []});
-      fetch("https://www.googleapis.com/youtube/v3/playlists?key=AIzaSyDotJrfVw9QwJVu85Hs91Dh2DYDsvOiw6Q&channelId=" + this.input.value + "&part=snippet,contentDetails&maxResults=50")
+
+      fetch("https://www.googleapis.com/youtube/v3/playlists?key=" + API_KEY + "&channelId=" + this.inputId.value + "&part=snippet,contentDetails&maxResults=50")
       .then(res => res.json())
       .then(json =>{
         for(let i = 0; i < json.items.length; i++)
@@ -31,28 +35,33 @@ class App extends Component {
                         playlistClicked: false}]
                       });
       });
-      this.input.value = '';
+      this.inputId.value = '';
     }
 
     handleClick = (e) => {
       this.setState({vids: []});
       let a = null;
+      const arr = [...this.state.playlists]; //store playlists state into array
       for(let i = 0; i < this.state.playlists.length; i++) 
-      if(this.state.playlists[i]["id"] === e.target["id"]) {
-        a = i;
-    }
-    const arr = [...this.state.playlists];
-    arr[a] = {...arr[a], playlistClicked: !arr[a].playlistClicked};
-    this.setState({
-      playlists: arr
-    })
+      {
+        if(this.state.playlists[i]["id"] === e.target["id"]) //check if playlist from state is the one clicked
+        {
+          arr[i] = {...arr[i], playlistClicked: !arr[i].playlistClicked}; //toggle clicked playlist (show/hide)
+        } else {
+          arr[i] = {...arr[i], playlistClicked: false}; //set all non-clicked playlistsClicked value to false (hide)
+        }
+      }
 
+      this.setState({
+        playlists: arr
+      });
   }
+
   handlePlaylistClick = (e) => {
 
     db = [];
     let pages = 0;
-    let url = "https://www.googleapis.com/youtube/v3/playlistItems?key=AIzaSyDotJrfVw9QwJVu85Hs91Dh2DYDsvOiw6Q&part=snippet,contentDetails&playlistId=" + e.target.name + "&maxResults=50";
+    let url = "https://www.googleapis.com/youtube/v3/playlistItems?key=" + API_KEY + "&part=snippet,contentDetails&playlistId=" + e.target.name + "&maxResults=50";
     fetch(url)
     .then(res => res.json())
     .then(json => {
@@ -115,8 +124,12 @@ class App extends Component {
     return (
       <>
         <form>
-          <input type="text" ref={input => this.input = input} />
-          <button type="submit" onClick={this.submitForm}>Submit</button>
+          <input type="text" placeholder="Channel's ID" ref={input => this.inputId = input} />
+          <button type="submit" onClick={this.submitForm}>Go</button>
+        </form>
+        <form>
+          <input type="text" placeholder="Channel's name" ref={input => this.inputName = input} />
+          <button type="submit" onClick={this.submitForm}>Go</button>
         </form>
             {/* 
             <Playlists url={this.state.currentUser} /> */}
@@ -132,60 +145,4 @@ class App extends Component {
     );
   }
 }
-/* 
-class Playlists extends Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      playlists: [],
-      show: false
-    }
-  } */
-    
-/* 
-  handleClick = (e) => {
-    let ids = [...this.state.playlists];
-    let index = ids.findIndex(item => item === e.target.id);
-    ids[index] = true;
-      this.setState({
-        playlists: [ ids ]
-      })
-  } */
-
-/* 
-  componentDidMount() {
-    
-  } */
-/* 
-  show = () => {
-    
-  }
-  render() {
-    const url = "https://www.googleapis.com/youtube/v3/playlists?key=AIzaSyDotJrfVw9QwJVu85Hs91Dh2DYDsvOiw6Q&channelId=" + this.props.url + "&part=snippet,contentDetails&maxResults=50";
-    return (
-      <>
-      
-      <a href={url}>{url}</a>
-      <button onClick={this.show}>show</button>
-      {this.state.playlists.map(item => <div key={item.id}  onClick={this.handleClick} >{item.title}</div>)}
-      {console.log(this.props)}
-    </>
-    )
-  }
-} */
-/* 
-class PlaylistItems extends Component {
-
-
-  render(){
-    return (
-      <>
-        
-        {console.log(this.state)}
-        <p>fasfas {this.props.url}</p>
-      </>
-    )
-  }
-}
- */
 export default App;
