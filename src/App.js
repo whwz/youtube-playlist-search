@@ -16,12 +16,11 @@ class App extends Component {
   /* 
   let url  = "https://www.googleapis.com/youtube/v3/search?part=id&q=" + this.input.value + "&type=channel&key=AIzaSyDotJrfVw9QwJVu85Hs91Dh2DYDsvOiw6Q";
   let url2 = "https://www.googleapis.com/youtube/v3/channels?key=AIzaSyDotJrfVw9QwJVu85Hs91Dh2DYDsvOiw6Q&forUsername=" + this.input.value + "&part=id"; */
-    submitForm = (e) => {
+    submitFormId = (e, id) => {
       console.log(e.target);
       console.log("https://www.googleapis.com/youtube/v3/playlists?key=" + API_KEY + "&channelId=" + this.inputId.value + "&part=snippet,contentDetails&maxResults=50");
       e.preventDefault();
       this.setState({playlists: []});
-
       fetch("https://www.googleapis.com/youtube/v3/playlists?key=" + API_KEY + "&channelId=" + this.inputId.value + "&part=snippet,contentDetails&maxResults=50")
       .then(res => res.json())
       .then(json =>{
@@ -38,9 +37,35 @@ class App extends Component {
       this.inputId.value = '';
     }
 
+    submitFormName = (e) => {
+      e.preventDefault();
+      this.setState({playlists: []});
+      let id = '';
+      fetch("https://www.googleapis.com/youtube/v3/channels?key=" + API_KEY + "&forUsername=" + this.inputName.value + "&part=id")
+      .then(res2 => res2.json())
+      .then(json2 =>{
+        id = json2.items[0].id;
+        console.log(json2);
+      });
+
+      setTimeout(()=>fetch("https://www.googleapis.com/youtube/v3/playlists?key=" + API_KEY + "&channelId=" + id + "&part=snippet,contentDetails&maxResults=50")
+      .then(res => res.json())
+      .then(json =>{
+        for(let i = 0; i < json.items.length; i++)
+          this.setState({ 
+            currentUser: '',
+            playlists: [...this.state.playlists, 
+                        {id: json.items[i].id,
+                        title: json.items[i].snippet.title,
+                        itemCount: json.items[i].contentDetails.itemCount,
+                        playlistClicked: false}]
+                      });
+      }), 2000);
+      this.inputName.value = '';
+    }
+
     handleClick = (e) => {
       this.setState({vids: []});
-      let a = null;
       const arr = [...this.state.playlists]; //store playlists state into array
       for(let i = 0; i < this.state.playlists.length; i++) 
       {
@@ -125,11 +150,11 @@ class App extends Component {
       <>
         <form>
           <input type="text" placeholder="Channel's ID" ref={input => this.inputId = input} />
-          <button type="submit" onClick={this.submitForm}>Go</button>
+          <button type="submit" onClick={this.submitFormId}>Go</button>
         </form>
         <form>
           <input type="text" placeholder="Channel's name" ref={input => this.inputName = input} />
-          <button type="submit" onClick={this.submitForm}>Go</button>
+          <button type="submit" onClick={this.submitFormName}>Go</button>
         </form>
             {/* 
             <Playlists url={this.state.currentUser} /> */}
