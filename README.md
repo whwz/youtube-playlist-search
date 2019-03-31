@@ -1,5 +1,6 @@
 live: https://whwz.github.io/youtube-playlist-search/
 
+This app let you find videos from your youtube playlist.
 
 # React Bootstrap with Material Design
 MDBootstrap for React
