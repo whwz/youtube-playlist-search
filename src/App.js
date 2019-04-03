@@ -162,11 +162,10 @@ class App extends Component {
       <>
       <MDBContainer style={{ width: "22rem" }} className="forms">{/* <MDBRow> */}
         {/* <MDBCol md="6"> */}
-        {/* <form>
+        <form>
           <input className="form-control channel" type="text" placeholder="Channel's ID" ref={input => this.inputId = input} />
           <MDBBtn className="button" color="primary" type="submit" onClick={this.submitFormId}>Go</MDBBtn>
-        </form> */}
-        <IdForm submitFormId = {this.submitFormId} />
+        </form>
         <form>
           <input className="form-control channel" type="text" placeholder="Channel's name" ref={input => this.inputName = input} />
           <MDBBtn className="button" color="primary" type="submit" onClick={this.submitFormName}>Go</MDBBtn>
@@ -199,15 +198,5 @@ class App extends Component {
       </>
     );
   }
-}
-
-
-const IdForm = () => {
-  return (
-    <form>
-          <input className="form-control channel" type="text" placeholder="Channel's ID" ref={input => this.inputId = input} />
-          <MDBBtn className="button" color="primary" type="submit" onClick={this.props.submitFormId}>Go</MDBBtn>
-        </form>
-  )
 }
 export default App;
