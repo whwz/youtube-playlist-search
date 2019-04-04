@@ -160,13 +160,13 @@ class App extends Component {
 
     return (
       <>
-      <MDBContainer style={{ width: "22rem" }} className="forms">{/* <MDBRow> */}
+      <MDBContainer className="container">{/* <MDBRow> */}
         {/* <MDBCol md="6"> */}
-        <form>
+        <form className="d-flex justify-content-center form">
           <input className="form-control channel" type="text" placeholder="Channel's ID" ref={input => this.inputId = input} />
           <MDBBtn className="button" color="primary" type="submit" onClick={this.submitFormId}>Go</MDBBtn>
         </form>
-        <form>
+        <form className="d-flex justify-content-center form">
           <input className="form-control channel" type="text" placeholder="Channel's name" ref={input => this.inputName = input} />
           <MDBBtn className="button" color="primary" type="submit" onClick={this.submitFormName}>Go</MDBBtn>
         </form>
@@ -175,20 +175,20 @@ class App extends Component {
             {/* 
             <Playlists url={this.state.currentUser} /> */}
       </MDBContainer>
-      <MDBContainer style={{ width: "22rem" }}>
+      <MDBContainer className="container">
         <MDBListGroup>
           {this.state.playlists.map((item, i) => item.playlistClicked ? 
           <div key={"div" + item.id}>
             <MDBListGroupItem className="d-flex justify-content-between align-items-center"  color="warning" id={item.id} key={i} onClick={this.handleClick} active>{item.title}<MDBBadge color="primary"
         pill>{item.itemCount}</MDBBadge></MDBListGroupItem>
             <MDBCol>
-              <MDBFormInline className="md-form">
+              <MDBFormInline className="md-form d-flex justify-content-center align-items-center">
                 <MDBIcon icon="search" />
                 <input className="form-control form-control-sm ml-3 w-75" type="search" key={"s" + item.id} name={item.id} onClick={this.handlePlaylistClick} onInput={this.filterVids} placeholder={"Search " + item.title + " playlist"} aria-label="Search" />
               </MDBFormInline>
             </MDBCol>
 {/*             <input type="search" key={"s" + item.id} name={item.id} onClick={this.handlePlaylistClick} onInput={this.handlePlaylistChange} placeholder={"Search " + item.title + " playlist"} />
- */}            {this.state.vids.length ? this.state.filteredVids./* slice(0, 10). */map((el, index) => <div class="d-flex justify-content-center"><MDBListGroupItem key={index} style={{ width: "22rem" }}><a href={"https://www.youtube.com/watch?v=" + el.id + "&list=" + item.id}>{el.title}</a></MDBListGroupItem></div>) : null}
+ */}            {this.state.vids.length ? this.state.filteredVids./* slice(0, 10). */map((el, index) => <div class="d-flex justify-content-center"><MDBListGroupItem key={index} className="container"><a href={"https://www.youtube.com/watch?v=" + el.id + "&list=" + item.id}>{el.title}</a></MDBListGroupItem></div>) : null}
           </div>
           : 
           <MDBListGroupItem className="d-flex justify-content-between align-items-center"  color="warning" id={item.id} key={item.id} onClick={this.handleClick} hover>{item.title}<MDBBadge color="primary"
