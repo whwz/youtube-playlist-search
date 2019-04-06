@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { MDBListGroup, MDBListGroupItem, MDBBtn, MDBContainer, MDBBadge, MDBInput, MDBCol, MDBRow,  MDBFormInline, MDBIcon } from "mdbreact";
+import { MDBListGroup, MDBListGroupItem, MDBBtn, MDBContainer, MDBBadge, MDBInput, MDBCol, MDBRow,  MDBFormInline, MDBIcon, MDBAnimation } from "mdbreact";
 import "./index.css";
 import { tokens, API_KEY } from "./env";
 import './App.css';
@@ -184,15 +184,15 @@ class App extends Component {
             <MDBCol>
               <MDBFormInline className="md-form d-flex justify-content-center align-items-center">
                 <MDBIcon icon="search" />
-                <input className="form-control form-control-sm ml-3 w-75" type="search" key={"s" + item.id} name={item.id} onClick={this.handlePlaylistClick} onInput={this.filterVids} placeholder={"Search " + item.title + " playlist"} aria-label="Search" />
+                <MDBAnimation type="zoomIn"><input className="form-control form-control-sm ml-3 w-75" type="search" key={"s" + item.id} name={item.id} onClick={this.handlePlaylistClick} onInput={this.filterVids} placeholder={"Search " + item.title + " playlist"} aria-label="Search" /></MDBAnimation>
               </MDBFormInline>
             </MDBCol>
 {/*             <input type="search" key={"s" + item.id} name={item.id} onClick={this.handlePlaylistClick} onInput={this.handlePlaylistChange} placeholder={"Search " + item.title + " playlist"} />
  */}            {this.state.vids.length ? this.state.filteredVids./* slice(0, 10). */map((el, index) => <div class="d-flex justify-content-center"><MDBListGroupItem key={index} className="container"><a href={"https://www.youtube.com/watch?v=" + el.id + "&list=" + item.id}>{el.title}</a></MDBListGroupItem></div>) : null}
           </div>
           : 
-          <MDBListGroupItem className="d-flex justify-content-between align-items-center"  color="warning" id={item.id} key={item.id} onClick={this.handleClick} hover>{item.title}<MDBBadge color="primary"
-          pill>{item.itemCount}</MDBBadge></MDBListGroupItem>)}
+          <MDBAnimation type="fadeIn" duration="1s"><MDBListGroupItem className="d-flex justify-content-between align-items-center"  color="warning" id={item.id} key={item.id} onClick={this.handleClick} hover>{item.title}<MDBBadge color="primary"
+          pill>{item.itemCount}</MDBBadge></MDBListGroupItem></MDBAnimation>)}
         </MDBListGroup>
         </MDBContainer>
       </>
