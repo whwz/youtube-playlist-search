@@ -1,10 +1,10 @@
 self.__precacheManifest = [
   {
-    "revision": "11911410dca2de148f30954eb2fd5eab",
-    "url": "/youtube-playlist-search/static/media/arrow_left.11911410.svg"
+    "revision": "8ef6a08cdc1154920165680a4edde771",
+    "url": "/youtube-playlist-search/static/media/arrow_right.8ef6a08c.svg"
   },
   {
-    "revision": "0848896fb7a92bd9ae63",
+    "revision": "0068b880a9b28c5d532a",
     "url": "/youtube-playlist-search/static/css/main.7d04a8d1.chunk.css"
   },
   {
@@ -12,12 +12,12 @@ self.__precacheManifest = [
     "url": "/youtube-playlist-search/static/js/runtime~main.10c717be.js"
   },
   {
-    "revision": "e31fcf1885e371e19f5786c2bdfeae1b",
-    "url": "/youtube-playlist-search/static/media/Roboto-Bold.e31fcf18.ttf"
+    "revision": "894a2ede85a483bf9bedefd4db45cdb9",
+    "url": "/youtube-playlist-search/static/media/Roboto-Medium.894a2ede.ttf"
   },
   {
-    "revision": "79e4d70d9546ed32cfd5",
-    "url": "/youtube-playlist-search/static/js/2.79e4d70d.chunk.js"
+    "revision": "a7db170f17a47979d238",
+    "url": "/youtube-playlist-search/static/js/2.a7db170f.chunk.js"
   },
   {
     "revision": "65779ebcc35604a25c2ba77309c5b8af",
@@ -80,12 +80,12 @@ self.__precacheManifest = [
     "url": "/youtube-playlist-search/static/media/fa-solid-900.82905d8d.svg"
   },
   {
-    "revision": "8ef6a08cdc1154920165680a4edde771",
-    "url": "/youtube-playlist-search/static/media/arrow_right.8ef6a08c.svg"
+    "revision": "11911410dca2de148f30954eb2fd5eab",
+    "url": "/youtube-playlist-search/static/media/arrow_left.11911410.svg"
   },
   {
-    "revision": "0848896fb7a92bd9ae63",
-    "url": "/youtube-playlist-search/static/js/main.0848896f.chunk.js"
+    "revision": "0068b880a9b28c5d532a",
+    "url": "/youtube-playlist-search/static/js/main.0068b880.chunk.js"
   },
   {
     "revision": "dfe56a876d0282555d1e2458e278060f",
@@ -148,27 +148,27 @@ self.__precacheManifest = [
     "url": "/youtube-playlist-search/static/media/Roboto-Bold.dc81817d.woff"
   },
   {
-    "revision": "46e48ce0628835f68a7369d0254e4283",
-    "url": "/youtube-playlist-search/static/media/Roboto-Light.46e48ce0.ttf"
-  },
-  {
     "revision": "94998475f6aea65f558494802416c1cf",
     "url": "/youtube-playlist-search/static/media/Roboto-Thin.94998475.ttf"
   },
   {
-    "revision": "894a2ede85a483bf9bedefd4db45cdb9",
-    "url": "/youtube-playlist-search/static/media/Roboto-Medium.894a2ede.ttf"
+    "revision": "46e48ce0628835f68a7369d0254e4283",
+    "url": "/youtube-playlist-search/static/media/Roboto-Light.46e48ce0.ttf"
   },
   {
     "revision": "df7b648ce5356ea1ebce435b3459fd60",
     "url": "/youtube-playlist-search/static/media/Roboto-Regular.df7b648c.ttf"
   },
   {
-    "revision": "79e4d70d9546ed32cfd5",
+    "revision": "e31fcf1885e371e19f5786c2bdfeae1b",
+    "url": "/youtube-playlist-search/static/media/Roboto-Bold.e31fcf18.ttf"
+  },
+  {
+    "revision": "a7db170f17a47979d238",
     "url": "/youtube-playlist-search/static/css/2.b17ad78a.chunk.css"
   },
   {
-    "revision": "fb2d658b6228ac17fff653b3826a4aab",
+    "revision": "667ca6f969404efd5f9b3d6f5ccac628",
     "url": "/youtube-playlist-search/index.html"
   }
 ];
