@@ -15,56 +15,7 @@ class App extends Component {
       filteredVids: []
     }
   } 
-  /* 
-  let url  = "https://www.googleapis.com/youtube/v3/search?part=id&q=" + this.input.value + "&type=channel&key=AIzaSyDotJrfVw9QwJVu85Hs91Dh2DYDsvOiw6Q";
-  let url2 = "https://www.googleapis.com/youtube/v3/channels?key=AIzaSyDotJrfVw9QwJVu85Hs91Dh2DYDsvOiw6Q&forUsername=" + this.input.value + "&part=id"; */
-    submitFormId = (e, id) => {
-      console.log(e.target);
-      console.log("https://www.googleapis.com/youtube/v3/playlists?key=" + API_KEY + "&channelId=" + this.inputId.value + "&part=snippet,contentDetails&maxResults=50");
-      e.preventDefault();
-      this.setState({playlists: []});
-      fetch("https://www.googleapis.com/youtube/v3/playlists?key=" + API_KEY + "&channelId=" + this.inputId.value + "&part=snippet,contentDetails&maxResults=50")
-      .then(res => res.json())
-      .then(json =>{
-        for(let i = 0; i < json.items.length; i++)
-          this.setState({ 
-            currentUser: '',
-            playlists: [...this.state.playlists, 
-                        {id: json.items[i].id,
-                        title: json.items[i].snippet.title,
-                        itemCount: json.items[i].contentDetails.itemCount,
-                        playlistClicked: false}]
-                      });
-      });
-      this.inputId.value = '';
-    }
-
-    submitFormName = (e) => {
-      e.preventDefault();
-      this.setState({playlists: []});
-      let id = '';
-      fetch("https://www.googleapis.com/youtube/v3/channels?key=" + API_KEY + "&forUsername=" + this.inputName.value + "&part=id")
-      .then(res2 => res2.json())
-      .then(json2 =>{
-        id = json2.items[0].id;
-        console.log(json2);
-      });
-
-      setTimeout(()=>fetch("https://www.googleapis.com/youtube/v3/playlists?key=" + API_KEY + "&channelId=" + id + "&part=snippet,contentDetails&maxResults=50")
-      .then(res => res.json())
-      .then(json =>{
-        for(let i = 0; i < json.items.length; i++)
-          this.setState({ 
-            currentUser: '',
-            playlists: [...this.state.playlists, 
-                        {id: json.items[i].id,
-                        title: json.items[i].snippet.title,
-                        itemCount: json.items[i].contentDetails.itemCount,
-                        playlistClicked: false}]
-                      });
-      }), 500);
-      this.inputName.value = '';
-    }
+  
 
     handleClick = (e) => {
       this.setState({
@@ -160,18 +111,10 @@ class App extends Component {
 
     return (
       <>
-      <MDBContainer className="container">{/* <MDBRow> */}
-        {/* <MDBCol md="6"> */}
-        <form className="d-flex justify-content-center form">
-          <input className="form-control channel" type="text" placeholder="Channel's ID" ref={input => this.inputId = input} />
-          <MDBBtn className="button" color="primary" type="submit" onClick={this.submitFormId}>Go</MDBBtn>
-        </form>
-        <form className="d-flex justify-content-center form">
-          <input className="form-control channel" type="text" placeholder="Channel's name" ref={input => this.inputName = input} />
-          <MDBBtn className="button" color="primary" type="submit" onClick={this.submitFormName}>Go</MDBBtn>
-        </form>
-        {/* </MDBCol> */}
-      {/* </MDBRow> */}
+      <MDBContainer className="container">
+        <IdForm />
+        <NameForm />
+
             {/* 
             <Playlists url={this.state.currentUser} /> */}
       </MDBContainer>
@@ -197,6 +140,74 @@ class App extends Component {
         </MDBContainer>
       </>
     );
+  }
+}
+
+class IdForm extends Component {
+  state = { playlists: [] };
+  submitFormId = (e, id) => {
+    e.preventDefault();
+    this.setState({playlists: []});
+    fetch("https://www.googleapis.com/youtube/v3/playlists?key=" + API_KEY + "&channelId=" + this.inputId.value + "&part=snippet,contentDetails&maxResults=50")
+    .then(res => res.json())
+    .then(json =>{
+      for(let i = 0; i < json.items.length; i++)
+        this.setState({ 
+          playlists: [...this.state.playlists, 
+                      {id: json.items[i].id,
+                      title: json.items[i].snippet.title,
+                      itemCount: json.items[i].contentDetails.itemCount,
+                      playlistClicked: false}]
+                    });
+    });
+    this.inputId.value = '';
+  }
+  render() {
+    return (
+      <form className="d-flex justify-content-center form">
+          <input className="form-control channel" type="text" placeholder="Channel's ID" ref={input => this.inputId = input} />
+          <MDBBtn className="button" color="primary" type="submit" onClick={this.submitFormId}>Go</MDBBtn>
+      </form>
+    )
+  }
+}
+
+class NameForm extends Component {
+  state = { playlists: [] };
+
+  submitFormName = (e) => {
+    e.preventDefault();
+    this.setState({playlists: []});
+    let id = '';
+    fetch("https://www.googleapis.com/youtube/v3/channels?key=" + API_KEY + "&forUsername=" + this.inputName.value + "&part=id")
+    .then(res2 => res2.json())
+    .then(json2 =>{
+      id = json2.items[0].id;
+      console.log(json2);
+    });
+
+    setTimeout(()=>fetch("https://www.googleapis.com/youtube/v3/playlists?key=" + API_KEY + "&channelId=" + id + "&part=snippet,contentDetails&maxResults=50")
+    .then(res => res.json())
+    .then(json =>{
+      for(let i = 0; i < json.items.length; i++)
+        this.setState({ 
+          currentUser: '',
+          playlists: [...this.state.playlists, 
+                      {id: json.items[i].id,
+                      title: json.items[i].snippet.title,
+                      itemCount: json.items[i].contentDetails.itemCount,
+                      playlistClicked: false}]
+                    });
+    }), 500);
+    this.inputName.value = '';
+  }
+  render() {
+    return (
+      <form className="d-flex justify-content-center form">
+          <input className="form-control channel" type="text" placeholder="Channel's name" ref={input => this.inputName = input} />
+          <MDBBtn className="button" color="primary" type="submit" onClick={this.submitFormName}>Go</MDBBtn>
+      </form>
+    )
   }
 }
 export default App;
