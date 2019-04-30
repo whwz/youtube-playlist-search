@@ -15,6 +15,24 @@ class App extends Component {
       filteredVids: []
     }
   } 
+
+  fetchPlaylists = (data) => {
+    this.setState({playlists: []});
+    fetch("https://www.googleapis.com/youtube/v3/playlists?key=" + API_KEY + "&channelId=" + data + "&part=snippet,contentDetails&maxResults=50")
+    .then(res => res.json())
+    .then(json =>{
+      for(let i = 0; i < json.items.length; i++)
+        this.setState({ 
+          playlists: [...this.state.playlists, 
+                      {id: json.items[i].id,
+                      title: json.items[i].snippet.title,
+                      itemCount: json.items[i].contentDetails.itemCount,
+                      playlistClicked: false}]
+                    });
+    });
+  }
+
+
   
 
     handleClick = (e) => {
@@ -112,7 +130,7 @@ class App extends Component {
     return (
       <>
       <MDBContainer className="container">
-        <IdForm />
+        <IdForm handlerFromParent={this.fetchPlaylists} />
         <NameForm />
 
             {/* 
@@ -143,29 +161,35 @@ class App extends Component {
   }
 }
 
+
+
+
+
 class IdForm extends Component {
-  state = { playlists: [] };
-  submitFormId = (e, id) => {
-    e.preventDefault();
-    this.setState({playlists: []});
-    fetch("https://www.googleapis.com/youtube/v3/playlists?key=" + API_KEY + "&channelId=" + this.inputId.value + "&part=snippet,contentDetails&maxResults=50")
-    .then(res => res.json())
-    .then(json =>{
-      for(let i = 0; i < json.items.length; i++)
-        this.setState({ 
-          playlists: [...this.state.playlists, 
-                      {id: json.items[i].id,
-                      title: json.items[i].snippet.title,
-                      itemCount: json.items[i].contentDetails.itemCount,
-                      playlistClicked: false}]
-                    });
-    });
-    this.inputId.value = '';
+  constructor(props){
+    super(props);
+    this.state = { input: '' };
   }
+
+  submitFormId = (e) => {
+    e.preventDefault();
+    this.props.handlerFromParent(this.state.input);
+    
+    this.setState({
+      input: ''
+    });
+  }
+
+  handleChange = (e) => {
+    this.setState({
+      input: e.target.value
+    });
+  }
+
   render() {
     return (
       <form className="d-flex justify-content-center form">
-          <input className="form-control channel" type="text" placeholder="Channel's ID" ref={input => this.inputId = input} />
+          <input className="form-control channel" type="text" placeholder="Channel's ID" value={this.state.input} onChange={this.handleChange} />
           <MDBBtn className="button" color="primary" type="submit" onClick={this.submitFormId}>Go</MDBBtn>
       </form>
     )
