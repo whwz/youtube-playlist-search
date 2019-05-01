@@ -32,7 +32,30 @@ class App extends Component {
     });
   }
 
+fetchFromName = (data) => {
+  this.setState({playlists: []});
+  let id = '';
+  fetch("https://www.googleapis.com/youtube/v3/channels?key=" + API_KEY + "&forUsername=" + data + "&part=id")
+      .then(res2 => res2.json())
+      .then(json2 =>{
+        id = json2.items[0].id;
+        console.log(json2);
+      });
 
+      setTimeout(()=>fetch("https://www.googleapis.com/youtube/v3/playlists?key=" + API_KEY + "&channelId=" + id + "&part=snippet,contentDetails&maxResults=50")
+      .then(res => res.json())
+      .then(json =>{
+        for(let i = 0; i < json.items.length; i++)
+          this.setState({ 
+            currentUser: '',
+            playlists: [...this.state.playlists, 
+                        {id: json.items[i].id,
+                        title: json.items[i].snippet.title,
+                        itemCount: json.items[i].contentDetails.itemCount,
+                        playlistClicked: false}]
+                      });
+}), 500);
+}
   
 
     handleClick = (e) => {
@@ -131,7 +154,7 @@ class App extends Component {
       <>
       <MDBContainer className="container">
         <IdForm handlerFromParent={this.fetchPlaylists} />
-        <NameForm />
+        <NameForm handlerFromParent={this.fetchFromName} />
 
             {/* 
             <Playlists url={this.state.currentUser} /> */}
@@ -197,38 +220,30 @@ class IdForm extends Component {
 }
 
 class NameForm extends Component {
-  state = { playlists: [] };
+  constructor(props){
+    super(props);
+    this.state = { input: '' };
+  }
 
   submitFormName = (e) => {
     e.preventDefault();
-    this.setState({playlists: []});
-    let id = '';
-    fetch("https://www.googleapis.com/youtube/v3/channels?key=" + API_KEY + "&forUsername=" + this.inputName.value + "&part=id")
-    .then(res2 => res2.json())
-    .then(json2 =>{
-      id = json2.items[0].id;
-      console.log(json2);
+    this.props.handlerFromParent(this.state.input);
+    
+    this.setState({
+      input: ''
     });
-
-    setTimeout(()=>fetch("https://www.googleapis.com/youtube/v3/playlists?key=" + API_KEY + "&channelId=" + id + "&part=snippet,contentDetails&maxResults=50")
-    .then(res => res.json())
-    .then(json =>{
-      for(let i = 0; i < json.items.length; i++)
-        this.setState({ 
-          currentUser: '',
-          playlists: [...this.state.playlists, 
-                      {id: json.items[i].id,
-                      title: json.items[i].snippet.title,
-                      itemCount: json.items[i].contentDetails.itemCount,
-                      playlistClicked: false}]
-                    });
-    }), 500);
-    this.inputName.value = '';
   }
+
+  handleChange = (e) => {
+    this.setState({
+      input: e.target.value
+    });
+  }
+
   render() {
     return (
       <form className="d-flex justify-content-center form">
-          <input className="form-control channel" type="text" placeholder="Channel's name" ref={input => this.inputName = input} />
+          <input className="form-control channel" type="text" placeholder="Channel's name" value={this.state.input} onChange={this.handleChange} />
           <MDBBtn className="button" color="primary" type="submit" onClick={this.submitFormName}>Go</MDBBtn>
       </form>
     )
