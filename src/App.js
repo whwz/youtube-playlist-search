@@ -9,14 +9,13 @@ class App extends Component {
   constructor(props){
     super(props);
     this.state = {
-      currentUser: '',
       playlists: [],
       vids: db,
       filteredVids: []
     }
   } 
 
-  fetchPlaylists = (data) => {
+  fetchPlaylistsFromId = (data) => {
     this.setState({playlists: []});
     fetch("https://www.googleapis.com/youtube/v3/playlists?key=" + API_KEY + "&channelId=" + data + "&part=snippet,contentDetails&maxResults=50")
     .then(res => res.json())
@@ -32,7 +31,7 @@ class App extends Component {
     });
   }
 
-fetchFromName = (data) => {
+  fetchPlaylistsFromName = (data) => {
   this.setState({playlists: []});
   let id = '';
   fetch("https://www.googleapis.com/youtube/v3/channels?key=" + API_KEY + "&forUsername=" + data + "&part=id")
@@ -54,29 +53,29 @@ fetchFromName = (data) => {
                         itemCount: json.items[i].contentDetails.itemCount,
                         playlistClicked: false}]
                       });
-}), 500);
+      }), 500);
 }
   
 
-    handleClick = (e) => {
-      this.setState({
-        vids: [],
-        filteredVids: []
-      });
-      const arr = [...this.state.playlists]; //store playlists state into array
-      for(let i = 0; i < this.state.playlists.length; i++) 
+  handleClick = (e) => {
+    this.setState({
+      vids: [],
+      filteredVids: []
+    });
+    const arr = [...this.state.playlists]; //store playlists state into array
+    for(let i = 0; i < this.state.playlists.length; i++) 
+    {
+      if(this.state.playlists[i]["id"] === e.target["id"]) //check if playlist from state is the one clicked
       {
-        if(this.state.playlists[i]["id"] === e.target["id"]) //check if playlist from state is the one clicked
-        {
-          arr[i] = {...arr[i], playlistClicked: !arr[i].playlistClicked}; //toggle clicked playlist (show/hide)
-        } else {
-          arr[i] = {...arr[i], playlistClicked: false}; //set all non-clicked playlistsClicked value to false (hide)
-        }
+        arr[i] = {...arr[i], playlistClicked: !arr[i].playlistClicked}; //toggle clicked playlist (show/hide)
+      } else {
+        arr[i] = {...arr[i], playlistClicked: false}; //set all non-clicked playlistsClicked value to false (hide)
       }
+    }
 
-      this.setState({
-        playlists: arr
-      });
+    this.setState({
+      playlists: arr
+    });
   }
 
   handlePlaylistClick = (e) => {
@@ -153,8 +152,8 @@ fetchFromName = (data) => {
     return (
       <>
       <MDBContainer className="container">
-        <IdForm handlerFromParent={this.fetchPlaylists} />
-        <NameForm handlerFromParent={this.fetchFromName} />
+        <IdForm handlerFromParent={this.fetchPlaylistsFromId} />
+        <NameForm handlerFromParent={this.fetchPlaylistsFromName} />
 
             {/* 
             <Playlists url={this.state.currentUser} /> */}
@@ -197,7 +196,6 @@ class IdForm extends Component {
   submitFormId = (e) => {
     e.preventDefault();
     this.props.handlerFromParent(this.state.input);
-    
     this.setState({
       input: ''
     });
@@ -228,7 +226,6 @@ class NameForm extends Component {
   submitFormName = (e) => {
     e.preventDefault();
     this.props.handlerFromParent(this.state.input);
-    
     this.setState({
       input: ''
     });
@@ -249,4 +246,5 @@ class NameForm extends Component {
     )
   }
 }
+
 export default App;
